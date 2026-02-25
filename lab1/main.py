@@ -1,5 +1,4 @@
 from numpy import exp, array, random, dot
-import matplotlib.pyplot as plt 
 
 class NeuralNetwork():
     def __init__(self):
@@ -13,14 +12,16 @@ class NeuralNetwork():
         return x * (1 - x)
 
     def train(self, training_set_inputs, training_set_outputs, number_of_training_iterations):
-        self.errors = []
+        eps = 0.001
 
         for iteration in range(number_of_training_iterations):
             output = self.think(training_set_inputs)
             error = training_set_outputs - output
 
             mse = (error**2).mean()
-            self.errors.append(mse)
+            if mse < eps: 
+                print(f"Training finished on interation: {iteration}")
+                break
 
             adjustment = dot(training_set_inputs.T, error * self.__sigmoid_derivative(output))
             
@@ -43,15 +44,10 @@ if __name__ == "__main__":
 
     training_set_outputs = array([[0, 1, 1, 0]]).T
 
-    neural_network.train(training_set_inputs, training_set_outputs, 200)
+    neural_network.train(training_set_inputs, training_set_outputs, 10000)
     print("New synaptic weights after training: ")
     print(neural_network.synaptic_weights)
 
     print("Considering new situation [1, 0, 0] -> ?: ")
     print(neural_network.think(array([1, 0, 0])))
-
-    plt.plot(neural_network.errors)
-    plt.xlabel("Iteration")
-    plt.ylabel("MSE")
-    plt.show()
 
