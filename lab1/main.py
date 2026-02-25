@@ -1,8 +1,8 @@
 from numpy import exp, array, random, dot
 
 class NeuralNetwork():
-    def __init__(self):
-        random.seed(1)
+    def __init__(self, seed: int):
+        random.seed(seed)
         self.synaptic_weights = 2 * random.random((3, 1)) - 1
 
     def __sigmoid(self, x):
@@ -23,25 +23,26 @@ class NeuralNetwork():
         return self.__sigmoid(dot(inputs, self.synaptic_weights))
 
 if __name__ == "__main__":
-    neural_network = NeuralNetwork()
-    print("Random starting synaptic weights: ")
-    print(neural_network.synaptic_weights)
+    for seed in range(3): 
+        print(f"\n\nSEED IS {seed}")
+        neural_network = NeuralNetwork(seed)
+        print("Random starting synaptic weights: ")
+        print(neural_network.synaptic_weights)
 
-    training_set_inputs = array([
-        [0, 0, 1], 
-        [1, 1, 1], 
-        [1, 0, 1], 
-        [0, 1, 1], 
-        [1, 1, 0], 
-        [0, 0, 0]
-    ])
+        training_set_inputs = array([
+            [0, 0, 1], 
+            [1, 1, 1], 
+            [1, 0, 1], 
+            [0, 1, 1], 
+        ])
 
-    training_set_outputs = array([[0, 1, 1, 0, 1, 0]]).T
+        training_set_outputs = array([[0, 1, 1, 0]]).T
 
-    neural_network.train(training_set_inputs, training_set_outputs, 10000)
-    print("New synaptic weights after training: ")
-    print(neural_network.synaptic_weights)
+        neural_network.train(training_set_inputs, training_set_outputs, 10000)
+        print("New synaptic weights after training: ")
+        print(neural_network.synaptic_weights)
 
-    print("Considering new situation [1, 0, 0] -> ?: ")
-    print(neural_network.think(array([1, 0, 0])))
+        print("Considering new situation [1, 0, 0] -> ?: ")
+        print(neural_network.think(array([1, 0, 0])))
+
 
